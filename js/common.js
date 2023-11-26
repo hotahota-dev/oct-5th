@@ -176,7 +176,9 @@ for (let i = 0; i < csvArray.length; i++) {
 
 }
 
-setCookieData(cookie_data);
+if (navigator.cookieEnabled && cookie_data) {
+  setCookieData(cookie_data);
+}
 
 
 (() => {
@@ -216,20 +218,22 @@ function makeTotalPrice() {
     total = total + tmp_total;
   }
 
-  var dispTotal = document.getElementById('total_price');
-  dispTotal.innerHTML = "総合計 ￥" + total;
+  if (navigator.cookieEnabled) {
 
-  save_array = [];
-  var num_elm = document.getElementsByClassName('num_textbox');
-  var pulldown_elm = document.querySelectorAll('select');
+    var dispTotal = document.getElementById('total_price');
+    dispTotal.innerHTML = "総合計 ￥" + total;
 
-  var tmp_array = [];
-  for (let index = 0; index < csvArray.length; index++) {
-    tmp_array.push({ id: index, num: num_elm[index].value, member: pulldown_elm[index].value });
+    save_array = [];
+    var num_elm = document.getElementsByClassName('num_textbox');
+    var pulldown_elm = document.querySelectorAll('select');
+
+    var tmp_array = [];
+    for (let index = 0; index < csvArray.length; index++) {
+      tmp_array.push({ id: index, num: num_elm[index].value, member: pulldown_elm[index].value });
+    }
+    setCookie('jsondata', tmp_array);
   }
-  setCookie('jsondata', tmp_array);
 }
-
 
 function submit_tsv() {
   var output_array = [];
@@ -318,8 +322,8 @@ const setCookie = (name, json) => {
 function setCookieData(cookie_data) {
   var num_elm = document.getElementsByClassName('num_textbox');
   var pulldown_elm = document.querySelectorAll('select');
-
-  for (let index = 0; index < csvArray.length; index++) {
+console.log(cookie_data);
+  for (let index = 0; index < cookie_data.length; index++) {
     if (cookie_data['jsondata'][index]['num'] != '') {
       num_elm[index].value = cookie_data['jsondata'][index]['num'];
     }
