@@ -11,38 +11,22 @@
 </head>
 <body onload="funcLoad()">
   <h1>OCTPATH 5th Single</h1>
+
   <div id="container">
     <div id="content">
 
     </div>
-    <div id="total_price">総合計 ￥0</div>
-  </div>
-
-
-
-  <!-- <div>オンライントーク会</div>
-  <div>1月13日(土)</div>
-  <div>応募期間:11/21~11/23 当落発表:11/30</div>
-  <div>1部 14:00~14:30</div>
-
-  <select name="food-name" id="food-name">
-  <option value="">メンバー選択</option>
-  </select> -->
-<!-- <div id="price1"></div> -->
-
-  <!-- <div class="container"> -->
-
-    <!-- <div class="field">
-      <button class="button num_button" id="down">－</button>
-      <input type="text" value="0" class="inputtext" id="textbox" onchange="makeTotalPrice()">
-      <button class="button num_button" id="up">＋</button>
+    <br><br>
+    <div>
+      <div id="tsv_btn"><input type="button" value="TSV出力" onclick="submit_tsv()"></div>
+      <textarea name="tsv_textarea"  cols="30" rows="10"></textarea>
     </div>
-  
-    　<button class="button resetbtn" id="reset">RESET</button>
-   -->
-  <!-- </div> -->
-
-  
+    <br><br>
+    <br><br>
+    <div id="total_price">総合計 ￥0</div>
+    <!-- <input id="scroll_btn" type="button" value="↓" onclick="scrollBottom()"> -->
+  </div>
+ 
   
 </body>
 <script src="./js/common.js"></script>

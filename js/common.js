@@ -1,22 +1,22 @@
 // CSVファイルを取得
 let csv = new XMLHttpRequest();
- 
+
 // CSVファイルへのパス
 csv.open("GET", "eventData.csv", false);
- 
+
 // csvファイル読み込み失敗時のエラー対応
 try {
   csv.send(null);
 } catch (err) {
   console.log(err);
 }
- 
+
 // 配列を定義
 let csvArray = [];
- 
+
 // 改行ごとに配列化
 let lines = csv.responseText.split(/\r\n|\n/);
- 
+
 // 1行ごとに処理
 for (let i = 0; i < lines.length; ++i) {
   let cells = lines[i].split(",");
@@ -24,7 +24,7 @@ for (let i = 0; i < lines.length; ++i) {
     csvArray.push(cells);
   }
 }
- 
+
 const ID = 0;
 const NAME = 1;
 const BU = 2;
@@ -40,37 +40,39 @@ for (let i = 0; i < csvArray.length; i++) {
   var block_div = document.createElement("div");
   block_div.setAttribute("id", "eve" + i);
   document.getElementById("content").appendChild(block_div);
-  var eve_div = document.getElementById("eve"+i);
+  var eve_div = document.getElementById("eve" + i);
 
   // イベント名出力
-  if (i==0 || row[NAME] != csvArray[i-1][NAME]) {
+  if (i == 0 || row[NAME] != csvArray[i - 1][NAME]) {
     var name_div = document.createElement("div");
     name_div.setAttribute("id", "name" + i);
     name_div.innerHTML = row[NAME];
     eve_div.appendChild(name_div);
   }
-  
+
   // イベント日
-  if (i==0 || row[DATE] != csvArray[i-1][DATE]) {
-  var date_div = document.createElement("div");
-  date_div.setAttribute("id", "date" + i);
-  date_div.innerHTML = "＜"+row[DATE]+"＞";
-  eve_div.appendChild(date_div);
+  if (i == 0 || row[DATE] != csvArray[i - 1][DATE]) {
+    var date_div = document.createElement("div");
+    date_div.setAttribute("id", "date" + i);
+    date_div.innerHTML = "＜" + row[DATE] + "＞";
+    eve_div.appendChild(date_div);
   }
-  
+
   // 部
-  if (i==0 || row[BU] != csvArray[i-1][BU]) {
-  var date_div = document.createElement("div");
-  date_div.setAttribute("id", "bu" + i);
-  date_div.innerHTML = row[BU];
-  eve_div.appendChild(date_div);
+  if (i == 0 || row[BU] != csvArray[i - 1][BU]) {
+    var date_div = document.createElement("div");
+    date_div.setAttribute("id", "bu" + i);
+    date_div.innerHTML = row[BU];
+    eve_div.appendChild(date_div);
   }
 
   // 応募期間
-  var apply_div = document.createElement("div");
-  apply_div.setAttribute("id", "apply" + i);
-  apply_div.innerHTML = row[APPLY];
-  eve_div.appendChild(apply_div);
+  if (i == 0 || row[APPLY] != csvArray[i - 1][APPLY]) {
+    var apply_div = document.createElement("div");
+    apply_div.setAttribute("id", "apply" + i);
+    apply_div.innerHTML = row[APPLY];
+    eve_div.appendChild(apply_div);
+  }
 
   // メンバープルダウン
   // 動的に取得
@@ -111,13 +113,13 @@ for (let i = 0; i < csvArray.length; i++) {
     set_div.innerHTML = "※" + row[SET];
     price_div.appendChild(set_div);
   }
-  
+
   // 個数
   var num_div = document.createElement("div");
   var num_down_elm = document.createElement("button");
   var num_input_elm = document.createElement("input");
   var num_up_elm = document.createElement("button");
-  
+
   num_div.setAttribute("class", "count_num");
   num_down_elm.setAttribute("id", "down_bt" + i);
   num_down_elm.setAttribute("class", "count_btn");
@@ -129,41 +131,43 @@ for (let i = 0; i < csvArray.length; i++) {
   num_up_elm.setAttribute("id", "up_bt" + i);
   num_up_elm.setAttribute("class", "count_btn");
   num_up_elm.innerHTML = "+";
-  
+
   num_div.appendChild(num_down_elm);
   num_div.appendChild(num_input_elm);
   num_div.appendChild(num_up_elm);
   eve_div.appendChild(num_div);
 
   // イベントごとの合計出力
-  var eve_total_elm = document.createElement("div");
-  eve_total_elm.setAttribute("id", "eve_total" + i);
-  eve_total_elm.innerHTML = "合計 ￥0";
-  eve_div.appendChild(eve_total_elm);
+  var eve_total_div = document.createElement("div");
+  var eve_total_span = document.createElement("span");
+  eve_total_div.setAttribute("id", "eve_total" + i);
+  eve_total_span.innerHTML = "合計 ￥0";
+  eve_div.appendChild(eve_total_div);
+  eve_total_div.appendChild(eve_total_span);
 }
 
 
 
 (() => {
-    //HTMLのid値を使って以下のDOM要素を取得
-    var downbutton = document.querySelectorAll('.count_num');
-    for(var i = 0; i < downbutton.length; i++){
-      downbutton[i].children[0].addEventListener('click',function(){
-        if(this.parentElement.children[1].value >= 1) {
-          this.parentElement.children[1].value--;
-          makeTotalPrice();
-        }
-      },false);
-      downbutton[i].children[2].addEventListener('click',function(){
-          this.parentElement.children[1].value++;
-          makeTotalPrice();
-      },false);
-      downbutton[i].children[1].addEventListener('change',function(){
-          makeTotalPrice();
-      },false);
+  //HTMLのid値を使って以下のDOM要素を取得
+  var downbutton = document.querySelectorAll('.count_num');
+  for (var i = 0; i < downbutton.length; i++) {
+    downbutton[i].children[0].addEventListener('click', function () {
+      if (this.parentElement.children[1].value >= 1) {
+        this.parentElement.children[1].value--;
+        makeTotalPrice();
+      }
+    }, false);
+    downbutton[i].children[2].addEventListener('click', function () {
+      this.parentElement.children[1].value++;
+      makeTotalPrice();
+    }, false);
+    downbutton[i].children[1].addEventListener('change', function () {
+      makeTotalPrice();
+    }, false);
   }
- 
-  })();
+
+})();
 
 function funcLoad() {
   // makePull();
@@ -177,10 +181,49 @@ function makeTotalPrice() {
     var num = document.getElementById('num_textbox' + i);
     tmp_total = csvArray[i][PRICE] * num.value;
     document.getElementById('eve_total' + i).innerHTML = "合計 ￥" + tmp_total;
-    
+
     total = total + tmp_total;
   }
 
   var dispTotal = document.getElementById('total_price');
   dispTotal.innerHTML = "総合計 ￥" + total;
+}
+
+
+function submit_tsv() {
+  var output_array = [];
+  var header = [
+    'イベント名',
+    '開催日',
+    '部',
+    '応募期間',
+    '当落発表',
+    '単価',
+    'セット数',
+    '枚数',
+    '合計',
+  ];
+  output_array.push(header);
+  num_elm = document.getElementsByClassName('num_textbox');
+  for (let index = 0; index < csvArray.length; index++) {
+    var tmp_array = [];
+    tmp_array.push(csvArray[index][NAME]);
+    tmp_array.push(csvArray[index][DATE]);
+    tmp_array.push(csvArray[index][BU]);
+    var oubo = csvArray[index][APPLY].substr(csvArray[index][APPLY].indexOf(':') + 1, csvArray[index][APPLY].indexOf('当落発表') - 5);
+    tmp_array.push(oubo);
+    var oubo = csvArray[index][APPLY].substr(csvArray[index][APPLY].lastIndexOf(':') + 1, csvArray[index][APPLY].lastIndexOf('当落発表') - 1);
+    tmp_array.push(oubo);
+    tmp_array.push(csvArray[index][PRICE]);
+    tmp_array.push(csvArray[index][SET]);
+    tmp_array.push(num_elm[index].value);
+    tmp_array.push(csvArray[index][PRICE] * num_elm[index].value); // todo
+    // tmp_array.push('=SUM(INDIRECT("RC[-2]:RC[-1]",0))'); // todo
+    var row_tsv = tmp_array.join("\t");
+
+    output_array.push(row_tsv);
+  }
+  location.href = "./output.html";
+
+  console.log(output_array);
 }
