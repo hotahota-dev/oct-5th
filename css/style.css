@@ -1,31 +1,36 @@
-/* body {
+body {
   margin: 0;
   width: 100%;
+  text-align: center;
 }
 
 .container {
-  width: 300px;
-  margin: 200px auto 0;
+  min-height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
 }
 
 .field {
   display: flex;
 }
 
-.inputtext {
-  color:rgba(43, 32, 32, 0.76) ;
+.num_textbox {
+  color: rgba(43, 32, 32, 0.76);
   font-size: 18px;
   border-left: 0;
   border-right: 0;
-  width: 80px;
-  line-height: 3rem;
+  width: 40px;
+  line-height: 2rem;
   text-align: center;
   border: 1px solid #D7DBDD;
   padding: 0 10px;
 }
 
-.button {
-  color:rgba(43, 32, 32, 0.76) ;
+.count_btn {
+  color: rgba(43, 32, 32, 0.76);
   font-size: 18px;
   cursor: pointer;
   padding: 5px 25px;
@@ -37,4 +42,51 @@
 
 .resetbtn {
   margin: 20px 0 0 65px;
-} */
+}
+
+#total_price {
+  margin-top: auto;
+  width: 150px;
+  background-color: rgb(205, 151, 255);
+}
+
+select {
+  appearance: none;
+  height: 2.8em;
+  padding: .4em calc(.8em + 30px) .4em .8em;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  background-color: #fff;
+  color: #333333;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+div[id*="name"] {
+  font-size: 1.8em;
+  border-bottom: solid 2px rgb(203, 72, 255);
+  margin-top: 20px;
+}
+
+div[id*="date"] {
+  font-size: 1.5em;
+  font-weight: 1000;
+  margin-top: 10px;
+}
+
+div[id*="bu"] {
+  font-size: 1.3em;
+  margin-top: 10px;
+  font-weight: 700;
+}
+
+/* 値段とセット */
+div[id*="price"] {
+  display:flex;
+  justify-content: center;
+} 
+div[id*="set"] {
+  display:flex;
+  padding-left: 10px;
+  justify-content: center;
+} 

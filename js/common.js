@@ -25,9 +25,6 @@ for (let i = 0; i < lines.length; ++i) {
   }
 }
  
-// コンソールに配列を出力
-console.log(csvArray);
-
 const ID = 0;
 const NAME = 1;
 const BU = 2;
@@ -46,10 +43,10 @@ for (let i = 0; i < csvArray.length; i++) {
   var eve_div = document.getElementById("eve"+i);
 
   // イベント名出力
-  if (i==0 || row[ID] != csvArray[i-1][ID]) {
+  if (i==0 || row[NAME] != csvArray[i-1][NAME]) {
     var name_div = document.createElement("div");
     name_div.setAttribute("id", "name" + i);
-    name_div.innerHTML = "<h1>"+row[NAME]+"<h1>";
+    name_div.innerHTML = row[NAME];
     eve_div.appendChild(name_div);
   }
   
@@ -57,7 +54,7 @@ for (let i = 0; i < csvArray.length; i++) {
   if (i==0 || row[DATE] != csvArray[i-1][DATE]) {
   var date_div = document.createElement("div");
   date_div.setAttribute("id", "date" + i);
-  date_div.innerHTML = "<h2>"+row[DATE]+"<h2>";
+  date_div.innerHTML = "＜"+row[DATE]+"＞";
   eve_div.appendChild(date_div);
   }
   
@@ -65,7 +62,7 @@ for (let i = 0; i < csvArray.length; i++) {
   if (i==0 || row[BU] != csvArray[i-1][BU]) {
   var date_div = document.createElement("div");
   date_div.setAttribute("id", "bu" + i);
-  date_div.innerHTML = "<h3>"+row[BU]+"<h3>";
+  date_div.innerHTML = row[BU];
   eve_div.appendChild(date_div);
   }
 
@@ -86,6 +83,10 @@ for (let i = 0; i < csvArray.length; i++) {
 
   //select要素を取得する
   var select_elm = document.createElement('select');
+  var option_elm = document.createElement('option');
+  option_elm.value = '';
+  option_elm.textContent = 'メンバーを選択';
+  select_elm.appendChild(option_elm);
   memList.forEach(mem => {
     //option要素を新しく作る
     var option_elm = document.createElement('option');
@@ -101,9 +102,15 @@ for (let i = 0; i < csvArray.length; i++) {
 
   // 値段
   var price_div = document.createElement("div");
-  price_div.setAttribute("id", "name" + i);
+  price_div.setAttribute("id", "price" + i);
   price_div.innerHTML = "￥" + row[PRICE];
   eve_div.appendChild(price_div);
+  if (row[SET] != '') {
+    var set_div = document.createElement("div");
+    set_div.setAttribute("id", "set" + i);
+    set_div.innerHTML = "※" + row[SET];
+    price_div.appendChild(set_div);
+  }
   
   // 個数
   var num_div = document.createElement("div");
@@ -113,13 +120,14 @@ for (let i = 0; i < csvArray.length; i++) {
   
   num_div.setAttribute("class", "count_num");
   num_down_elm.setAttribute("id", "down_bt" + i);
-  num_down_elm.setAttribute("class", "down_bt");
+  num_down_elm.setAttribute("class", "count_btn");
   num_down_elm.innerHTML = "-";
 
   num_input_elm.setAttribute("id", "num_textbox" + i);
+  num_input_elm.setAttribute("class", "num_textbox");
   num_input_elm.value = "0";
   num_up_elm.setAttribute("id", "up_bt" + i);
-  num_up_elm.setAttribute("class", "up_bt");
+  num_up_elm.setAttribute("class", "count_btn");
   num_up_elm.innerHTML = "+";
   
   num_div.appendChild(num_down_elm);
@@ -130,6 +138,7 @@ for (let i = 0; i < csvArray.length; i++) {
   // イベントごとの合計出力
   var eve_total_elm = document.createElement("div");
   eve_total_elm.setAttribute("id", "eve_total" + i);
+  eve_total_elm.innerHTML = "合計 ￥0";
   eve_div.appendChild(eve_total_elm);
 }
 
@@ -147,6 +156,9 @@ for (let i = 0; i < csvArray.length; i++) {
       },false);
       downbutton[i].children[2].addEventListener('click',function(){
           this.parentElement.children[1].value++;
+          makeTotalPrice();
+      },false);
+      downbutton[i].children[1].addEventListener('change',function(){
           makeTotalPrice();
       },false);
   }
@@ -170,23 +182,5 @@ function makeTotalPrice() {
   }
 
   var dispTotal = document.getElementById('total_price');
-  dispTotal.innerHTML = total;
+  dispTotal.innerHTML = "総合計 ￥" + total;
 }
-
-  function makePull() {
-    //select要素を取得する
-    // var selectFoodName = document.getElementById('food-name');
-    
-    // memberArr.forEach(mem => {
-
-    //   //option要素を新しく作る
-    //   var option1 = document.createElement('option');
-
-    //   //option要素にvalueと表示名を設定
-    //   option1.value = mem;
-    //   option1.textContent = mem;
-
-    //   //select要素にoption要素を追加する
-    //   selectFoodName.appendChild(option1);
-    // });
-  }
