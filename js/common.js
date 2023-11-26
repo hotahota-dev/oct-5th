@@ -140,16 +140,19 @@ for (let i = 0; i < csvArray.length; i++) {
   option_elm.value = '';
   option_elm.textContent = 'メンバーを選択';
   select_elm.appendChild(option_elm);
+  var memIndex = 0;
   memList.forEach(mem => {
     //option要素を新しく作る
     var option_elm = document.createElement('option');
 
     //option要素にvalueと表示名を設定
-    option_elm.value = mem;
+    
+    option_elm.value = memIndex;
     option_elm.textContent = mem;
 
     //select要素にoption要素を追加する
     select_elm.appendChild(option_elm);
+    memIndex++;
   });
   eve_div.appendChild(select_elm);
 
@@ -221,12 +224,12 @@ if (navigator.cookieEnabled && typeof cookie_data['jsondata'] != 'undefined' && 
     }, false);
   }
 
-  // var mem_select = document.querySelectorAll('select');
-  // for (var i = 0; i < mem_select.length; i++) {
-  //   mem_select[i].addEventListener('change', function () {
-  //     setCookieJson();
-  //   }, false);
-  // }
+  var mem_select = document.querySelectorAll('select');
+  for (var i = 0; i < mem_select.length; i++) {
+    mem_select[i].addEventListener('change', function () {
+      setCookieJson();
+    }, false);
+  }
 
 })();
 
