@@ -197,7 +197,7 @@ for (let i = 0; i < csvArray.length; i++) {
   eve_total_div.appendChild(eve_total_span);
 
 }
-if (navigator.cookieEnabled && typeof cookie_data['jsondata'] != 'undefined' && cookie_data['jsondata'].length != 0) {
+if (navigator.cookieEnabled && (typeof cookie_data['jsondata'] != undefined) && cookie_data['jsondata'].length != 0) {
   setCookieData(cookie_data);
 }
 
@@ -221,12 +221,12 @@ if (navigator.cookieEnabled && typeof cookie_data['jsondata'] != 'undefined' && 
     }, false);
   }
 
-  var mem_select = document.querySelectorAll('select');
-  for (var i = 0; i < mem_select.length; i++) {
-    mem_select[i].addEventListener('change', function () {
-      setCookieJson();
-    }, false);
-  }
+  // var mem_select = document.querySelectorAll('select');
+  // for (var i = 0; i < mem_select.length; i++) {
+  //   mem_select[i].addEventListener('change', function () {
+  //     setCookieJson();
+  //   }, false);
+  // }
 
 })();
 
