@@ -197,7 +197,7 @@ for (let i = 0; i < csvArray.length; i++) {
   eve_total_div.appendChild(eve_total_span);
 
 }
-if (navigator.cookieEnabled && cookie_data['jsondata'].length != 0 && cookie_data['jsondata'] != 'undefined') {
+if (navigator.cookieEnabled && typeof cookie_data['jsondata'] != 'undefined' && cookie_data['jsondata'].length != 0) {
   setCookieData(cookie_data);
 }
 
