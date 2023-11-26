@@ -1,3 +1,30 @@
+const getCookie = () => {
+
+  let cookies = '';
+  let cookieArray = new Array();
+  let result = new Array();
+
+  //Cookieを取得する
+  cookies = document.cookie;
+
+  //Cookieを配列に分割してJSONに変換する
+  if (cookies) {
+    cookieArray = cookies.split(';');
+
+    cookieArray.forEach(data => {
+      data = data.split('=');
+
+      //data[0]: Cookieの名前（例では「user」）
+      //data[1]: Cookieの値（例では「json」）
+
+      result[data[0]] = JSON.parse(data[1]);
+    });
+  }
+  return result;
+}
+
+
+
 // CSVファイルを取得
 let csv = new XMLHttpRequest();
 
@@ -34,6 +61,8 @@ const PRICE = 5;
 const SET = 6;
 const MEM = 7;
 
+
+var cookie_data = getCookie();
 
 for (let i = 0; i < csvArray.length; i++) {
   var row = csvArray[i];
@@ -144,8 +173,10 @@ for (let i = 0; i < csvArray.length; i++) {
   eve_total_span.innerHTML = "合計 ￥0";
   eve_div.appendChild(eve_total_div);
   eve_total_div.appendChild(eve_total_span);
+
 }
 
+setCookieData(cookie_data);
 
 
 (() => {
@@ -187,6 +218,16 @@ function makeTotalPrice() {
 
   var dispTotal = document.getElementById('total_price');
   dispTotal.innerHTML = "総合計 ￥" + total;
+
+  save_array = [];
+  var num_elm = document.getElementsByClassName('num_textbox');
+  var pulldown_elm = document.querySelectorAll('select');
+
+  var tmp_array = [];
+  for (let index = 0; index < csvArray.length; index++) {
+    tmp_array.push({ id: index, num: num_elm[index].value, member: pulldown_elm[index].value });
+  }
+  setCookie('jsondata', tmp_array);
 }
 
 
@@ -200,11 +241,14 @@ function submit_tsv() {
     '当落発表',
     '単価',
     'セット数',
+    'メンバー',
     '枚数',
     '合計',
   ];
-  output_array.push(header);
-  num_elm = document.getElementsByClassName('num_textbox');
+  output_array.push(header.join("\t"));
+  var num_elm = document.getElementsByClassName('num_textbox');
+  var pulldown_elm = document.querySelectorAll('select');
+
   for (let index = 0; index < csvArray.length; index++) {
     var tmp_array = [];
     tmp_array.push(csvArray[index][NAME]);
@@ -216,14 +260,72 @@ function submit_tsv() {
     tmp_array.push(oubo);
     tmp_array.push(csvArray[index][PRICE]);
     tmp_array.push(csvArray[index][SET]);
+    tmp_array.push(pulldown_elm[index].value);
     tmp_array.push(num_elm[index].value);
-    tmp_array.push(csvArray[index][PRICE] * num_elm[index].value); // todo
-    // tmp_array.push('=SUM(INDIRECT("RC[-2]:RC[-1]",0))'); // todo
+    // tmp_array.push(csvArray[index][PRICE] * num_elm[index].value); // todo
+    tmp_array.push('=PRODUCT(INDIRECT("RC[-4]:RC[-1]",0))'); // todo
     var row_tsv = tmp_array.join("\t");
 
     output_array.push(row_tsv);
   }
-  location.href = "./output.html";
+  var tmp_array2 = [];
+  for (let index = 0; index < header.length - 3; index++) {
+    tmp_array2.push("");
+  }
+  tmp_array2.push("総合計");
+  tmp_array2.push('=SUM(INDIRECT("R[-' + csvArray.length + ']C:R[-1]C",0))');
+  tmp_array2.push('=SUM(INDIRECT("R[-' + csvArray.length + ']C:R[-1]C",0))');
+  output_array.push(tmp_array2.join("\t"));
 
-  console.log(output_array);
+  output_textarea = output_array.join("\n");
+
+  var textarea = document.querySelector('textarea[name="tsv_textarea"]');
+  textarea.value = output_textarea;
+
 }
+
+// function scrollBottom() {
+//   var trigger = document.getElementById('trigger');
+//   var element = document.documentElement;
+//   var bottom = element.scrollHeight - element.clientHeight;
+//   window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' });
+// }
+
+const setCookie = (name, json) => {
+
+
+  let cookie = '';
+  let expire = '';
+  let period = '';
+
+  //Cookieの保存名と値を指定
+  cookies = name + '=' + JSON.stringify(json) + ';';
+
+  //Cookieを保存するパスを指定
+  cookies += 'path=/ ;';
+
+  //Cookieを保存する期間を指定
+  period = 7; //保存日数
+  expire = new Date();
+  expire.setTime(expire.getTime() + 1000 * 3600 * 24 * period);
+  expire.toUTCString();
+  cookies += 'expires=' + expire + ';';
+
+  //Cookieを保存する
+  document.cookie = cookies;
+};
+
+function setCookieData(cookie_data) {
+  var num_elm = document.getElementsByClassName('num_textbox');
+  var pulldown_elm = document.querySelectorAll('select');
+
+  for (let index = 0; index < csvArray.length; index++) {
+    if (cookie_data['jsondata'][index]['num'] != '') {
+      num_elm[index].value = cookie_data['jsondata'][index]['num'];
+    }
+    if (cookie_data['jsondata'][index]['member']) {
+      pulldown_elm[index].value = cookie_data['jsondata'][index]['member'];
+    }
+  }
+}
+
