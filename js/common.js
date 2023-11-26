@@ -23,6 +23,28 @@ const getCookie = () => {
   return result;
 }
 
+const setCookie = (name, json) => {
+  let cookie = '';
+  let expire = '';
+  let period = '';
+
+  //Cookieの保存名と値を指定
+  cookies = name + '=' + JSON.stringify(json) + ';';
+
+  //Cookieを保存するパスを指定
+  cookies += 'path=/ ;';
+
+  //Cookieを保存する期間を指定
+  period = 7; //保存日数
+  expire = new Date();
+  expire.setTime(expire.getTime() + 1000 * 3600 * 24 * period);
+  expire.toUTCString();
+  cookies += 'expires=' + expire + ';';
+
+  //Cookieを保存する
+  document.cookie = cookies;
+};
+
 
 
 // CSVファイルを取得
@@ -175,8 +197,7 @@ for (let i = 0; i < csvArray.length; i++) {
   eve_total_div.appendChild(eve_total_span);
 
 }
-
-if (navigator.cookieEnabled && cookie_data) {
+if (navigator.cookieEnabled && cookie_data['jsondata'].length != 0 && cookie_data['jsondata'] != 'undefined') {
   setCookieData(cookie_data);
 }
 
@@ -200,12 +221,16 @@ if (navigator.cookieEnabled && cookie_data) {
     }, false);
   }
 
+  var mem_select = document.querySelectorAll('select');
+  for (var i = 0; i < mem_select.length; i++) {
+    mem_select[i].addEventListener('change', function () {
+      setCookieJson();
+    }, false);
+  }
+
 })();
 
-function funcLoad() {
-  // makePull();
-  // makeTotalPrice();
-}
+
 
 function makeTotalPrice() {
   total = 0;
@@ -217,12 +242,14 @@ function makeTotalPrice() {
 
     total = total + tmp_total;
   }
+  setCookieJson();
+}
 
+function setCookieJson() {
+  var dispTotal = document.getElementById('total_price');
+  dispTotal.innerHTML = "総合計 ￥" + total;
+  
   if (navigator.cookieEnabled) {
-
-    var dispTotal = document.getElementById('total_price');
-    dispTotal.innerHTML = "総合計 ￥" + total;
-
     save_array = [];
     var num_elm = document.getElementsByClassName('num_textbox');
     var pulldown_elm = document.querySelectorAll('select');
@@ -266,7 +293,6 @@ function submit_tsv() {
     tmp_array.push(csvArray[index][SET]);
     tmp_array.push(pulldown_elm[index].value);
     tmp_array.push(num_elm[index].value);
-    // tmp_array.push(csvArray[index][PRICE] * num_elm[index].value); // todo
     tmp_array.push('=PRODUCT(INDIRECT("RC[-4]:RC[-1]",0))'); // todo
     var row_tsv = tmp_array.join("\t");
 
@@ -295,35 +321,13 @@ function submit_tsv() {
 //   window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' });
 // }
 
-const setCookie = (name, json) => {
 
-
-  let cookie = '';
-  let expire = '';
-  let period = '';
-
-  //Cookieの保存名と値を指定
-  cookies = name + '=' + JSON.stringify(json) + ';';
-
-  //Cookieを保存するパスを指定
-  cookies += 'path=/ ;';
-
-  //Cookieを保存する期間を指定
-  period = 7; //保存日数
-  expire = new Date();
-  expire.setTime(expire.getTime() + 1000 * 3600 * 24 * period);
-  expire.toUTCString();
-  cookies += 'expires=' + expire + ';';
-
-  //Cookieを保存する
-  document.cookie = cookies;
-};
 
 function setCookieData(cookie_data) {
   var num_elm = document.getElementsByClassName('num_textbox');
   var pulldown_elm = document.querySelectorAll('select');
-console.log(cookie_data);
-  for (let index = 0; index < cookie_data.length; index++) {
+
+  for (let index = 0; index < csvArray.length; index++) {
     if (cookie_data['jsondata'][index]['num'] != '') {
       num_elm[index].value = cookie_data['jsondata'][index]['num'];
     }
@@ -331,5 +335,6 @@ console.log(cookie_data);
       pulldown_elm[index].value = cookie_data['jsondata'][index]['member'];
     }
   }
+  makeTotalPrice();
 }
 
