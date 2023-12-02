@@ -294,7 +294,7 @@ function submit_tsv() {
     tmp_array.push(oubo);
     tmp_array.push(csvArray[index][PRICE]);
     tmp_array.push(csvArray[index][SET]);
-    tmp_array.push(memList[pulldown_elm[index].value]);
+    tmp_array.push(pulldown_elm[index].value);
     tmp_array.push(num_elm[index].value);
     tmp_array.push('=PRODUCT(INDIRECT("RC[-4]:RC[-1]",0))'); // todo
     var row_tsv = tmp_array.join("\t");
