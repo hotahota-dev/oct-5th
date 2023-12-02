@@ -99,6 +99,12 @@ for (let i = 0; i < csvArray.length; i++) {
     name_div.setAttribute("id", "name" + i);
     name_div.innerHTML = row[NAME];
     eve_div.appendChild(name_div);
+
+    var tocNameLink = document.createElement("a");
+    tocNameLink.href = "#"+"name" + i;
+    tocNameLink.innerHTML = row[NAME]+"<br>";
+    tocNameLink.setAttribute("class", "tocName");
+    document.getElementById("toc").appendChild(tocNameLink);
   }
 
   // イベント日
@@ -204,6 +210,12 @@ if (navigator.cookieEnabled && typeof cookie_data['jsondata'] != 'undefined' && 
   setCookieData(cookie_data);
 }
 
+var tocCsvOutput = document.createElement("a");
+tocCsvOutput.href = "#tsv_btn";
+tocCsvOutput.innerHTML = "TSV出力<br>";
+tocCsvOutput.setAttribute("class", "tocName");
+document.getElementById("toc").appendChild(tocCsvOutput);
+
 
 (() => {
   //HTMLのid値を使って以下のDOM要素を取得
@@ -224,12 +236,16 @@ if (navigator.cookieEnabled && typeof cookie_data['jsondata'] != 'undefined' && 
     }, false);
   }
 
+
   var mem_select = document.querySelectorAll('select');
   for (var i = 0; i < mem_select.length; i++) {
     mem_select[i].addEventListener('change', function () {
       setCookieJson();
     }, false);
   }
+
+
+
 
 })();
 
@@ -242,6 +258,24 @@ function makeTotalPrice() {
     var num = document.getElementById('num_textbox' + i);
     tmp_total = csvArray[i][PRICE] * num.value;
     document.getElementById('eve_total' + i).innerHTML = "合計 ￥" + tmp_total;
+
+    // console.log(num);
+
+    if (num.value > 0) {
+      num.classList.add("set_color");
+    } else {
+      num.classList.remove("set_color");
+    }
+
+    var mem_select = document.querySelectorAll('select');
+    for (let i = 0; i < mem_select.length; i++) {
+      if (mem_select[i].value === '') {
+        mem_select[i].classList.remove("set_color");
+      } else {
+        mem_select[i].classList.add("set_color");
+      }
+    }
+
 
     total = total + tmp_total;
   }
@@ -294,11 +328,11 @@ function submit_tsv() {
     tmp_array.push(oubo);
     tmp_array.push(csvArray[index][PRICE]);
     tmp_array.push(csvArray[index][SET]);
-    tmp_array.push(pulldown_elm[index].value);
+    var optIdx = pulldown_elm[index].selectedIndex;
+    tmp_array.push((optIdx !== 0) ? pulldown_elm[index][optIdx].text : '');
     tmp_array.push(num_elm[index].value);
     tmp_array.push('=PRODUCT(INDIRECT("RC[-4]:RC[-1]",0))'); // todo
     var row_tsv = tmp_array.join("\t");
-
     output_array.push(row_tsv);
   }
   var tmp_array2 = [];

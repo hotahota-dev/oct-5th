@@ -31,13 +31,23 @@ body {
 
 .count_btn {
   /* color: rgba(43, 32, 32, 0.76); */
-  font-size: 18px;
+  /* font-size: 18px;
   cursor: pointer;
   padding: 5px 25px;
+  padding: 0 10px;
   background-color: white;
   border: 1px solid #868686;
   border-radius: 0;
-  outline: 0;
+  outline: 0; */
+  font-size: 18px;
+  border-left: 0;
+  border-right: 0;
+  width: 40px;
+  line-height: 2rem;
+  text-align: center;
+  border: 1px solid #868686;
+  padding: 0 10px;
+  background-color: white;
 }
 
 /* .resetbtn {
@@ -163,4 +173,42 @@ color: red;
 div[id*="apply"] {
   /* font-size: 1.1em; */
   margin-bottom: 10px;
+}
+
+.set_color {
+  background: rgb(255, 252, 74);
+}
+
+/* TOPボタン */
+#page_top{
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  right: 0;
+  bottom: 50px;
+  background: #636363;
+  opacity: 0.6;
+}
+#page_top a{
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+  text-decoration: none;
+}
+#page_top a::before{
+  /* font-family: 'Font Awesome 5 Free'; */
+  /* font-weight: 900; */
+  content: '↑';
+  font-size: 25px;
+  color: #fff;
+  position: absolute;
+  /* width: px; */
+  /* height: 40px; */
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  text-align: center;
 }
