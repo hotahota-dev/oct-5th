@@ -217,6 +217,8 @@ tocCsvOutput.setAttribute("class", "tocName");
 document.getElementById("toc").appendChild(tocCsvOutput);
 
 
+
+
 (() => {
   //HTMLのid値を使って以下のDOM要素を取得
   var downbutton = document.querySelectorAll('.count_num');
@@ -239,15 +241,21 @@ document.getElementById("toc").appendChild(tocCsvOutput);
 
   var mem_select = document.querySelectorAll('select');
   for (var i = 0; i < mem_select.length; i++) {
-    mem_select[i].addEventListener('change', function () {
-      setCookieJson();
-    }, false);
+    mem_select[i].addEventListener('change', {arg: mem_select[i], handleEvent: setColorPull}, false);
   }
 
-
-
-
 })();
+
+function setColorPull(arg) {
+  setCookieJson();
+
+  if (this.arg.value === '') {
+    this.arg.classList.remove("set_color");
+  } else {
+    // console.log("OK2");
+    this.arg.classList.add("set_color");
+  }
+}
 
 
 
@@ -259,23 +267,12 @@ function makeTotalPrice() {
     tmp_total = csvArray[i][PRICE] * num.value;
     document.getElementById('eve_total' + i).innerHTML = "合計 ￥" + tmp_total;
 
-    // console.log(num);
 
     if (num.value > 0) {
       num.classList.add("set_color");
     } else {
       num.classList.remove("set_color");
     }
-
-    var mem_select = document.querySelectorAll('select');
-    for (let i = 0; i < mem_select.length; i++) {
-      if (mem_select[i].value === '') {
-        mem_select[i].classList.remove("set_color");
-      } else {
-        mem_select[i].classList.add("set_color");
-      }
-    }
-
 
     total = total + tmp_total;
   }
@@ -351,12 +348,7 @@ function submit_tsv() {
 
 }
 
-// function scrollBottom() {
-//   var trigger = document.getElementById('trigger');
-//   var element = document.documentElement;
-//   var bottom = element.scrollHeight - element.clientHeight;
-//   window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' });
-// }
+
 
 
 
@@ -365,11 +357,18 @@ function setCookieData(cookie_data) {
   var pulldown_elm = document.querySelectorAll('select');
 
   for (let index = 0; index < csvArray.length; index++) {
-    if (cookie_data['jsondata'][index]['num'] != '') {
+    if (typeof cookie_data['jsondata'][index]['num'] != 'undefined') {
       num_elm[index].value = cookie_data['jsondata'][index]['num'];
     }
-    if (cookie_data['jsondata'][index]['member']) {
+    if (typeof cookie_data['jsondata'][index]['member'] != 'undefined') {
       pulldown_elm[index].value = cookie_data['jsondata'][index]['member'];
+      
+      // 背景色
+      if (cookie_data['jsondata'][index]['member'] === '') {
+        pulldown_elm[index].classList.remove("set_color");
+      } else {
+        pulldown_elm[index].classList.add("set_color");
+      }
     }
   }
   makeTotalPrice();
