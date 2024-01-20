@@ -328,7 +328,7 @@ function submit_tsv() {
     var optIdx = pulldown_elm[index].selectedIndex;
     tmp_array.push((optIdx !== 0) ? pulldown_elm[index][optIdx].text : '');
     tmp_array.push(num_elm[index].value);
-    tmp_array.push('=PRODUCT(INDIRECT("RC[-4]:RC[-1]",0))'); // todo
+    tmp_array.push('=PRODUCT(INDIRECT("RC[-4]",0),INDIRECT("RC[-1]",0))');
     var row_tsv = tmp_array.join("\t");
     output_array.push(row_tsv);
   }
