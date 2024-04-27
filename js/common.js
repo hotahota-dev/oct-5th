@@ -136,7 +136,7 @@ for (let i = 0; i < csvArray.length; i++) {
   let memList = row.filter((elm, memIdx) => {
     return memIdx >= MEM;
   });
-
+if (memList.length != 0) {
   var mem_div = document.createElement("div");
   mem_div.setAttribute("id", "mem" + i);
 
@@ -161,7 +161,7 @@ for (let i = 0; i < csvArray.length; i++) {
     memIndex++;
   });
   eve_div.appendChild(select_elm);
-
+}
   // 値段
   var price_div = document.createElement("div");
   price_div.setAttribute("id", "price" + i);
