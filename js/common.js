@@ -136,10 +136,10 @@ for (let i = 0; i < csvArray.length; i++) {
   let memList = row.filter((elm, memIdx) => {
     return memIdx >= MEM;
   });
-if (memList.length != 0) {
+
   var mem_div = document.createElement("div");
   mem_div.setAttribute("id", "mem" + i);
-
+if (memList.length != 0) {
   //select要素を取得する
   var select_elm = document.createElement('select');
   var option_elm = document.createElement('option');
