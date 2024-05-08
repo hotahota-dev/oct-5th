@@ -83,7 +83,6 @@ const PRICE = 5;
 const SET = 6;
 const MEM = 7;
 
-
 var cookie_data = getCookie();
 
 for (let i = 0; i < csvArray.length; i++) {
@@ -319,14 +318,27 @@ function submit_tsv() {
     tmp_array.push(csvArray[index][NAME]);
     tmp_array.push(csvArray[index][DATE]);
     tmp_array.push(csvArray[index][BU]);
+    
+    if (csvArray[index][APPLY].indexOf('当落発表') == false) {
+      tmp_array.push('');
+    } else {
     var oubo = csvArray[index][APPLY].substr(csvArray[index][APPLY].indexOf(':') + 1, csvArray[index][APPLY].indexOf('当落発表') - 5);
     tmp_array.push(oubo);
+    }
+    
+    if (csvArray[index][APPLY].indexOf('当落発表') == false) {
+      tmp_array.push('');
+    } else {
     var oubo = csvArray[index][APPLY].substr(csvArray[index][APPLY].lastIndexOf(':') + 1, csvArray[index][APPLY].lastIndexOf('当落発表') - 1);
     tmp_array.push(oubo);
+    }
+    
     tmp_array.push(csvArray[index][PRICE]);
     tmp_array.push(csvArray[index][SET]);
+    
     var optIdx = pulldown_elm[index].selectedIndex;
     tmp_array.push((optIdx !== 0) ? pulldown_elm[index][optIdx].text : '');
+    
     tmp_array.push(num_elm[index].value);
     tmp_array.push('=PRODUCT(INDIRECT("RC[-4]",0),INDIRECT("RC[-1]",0))');
     var row_tsv = tmp_array.join("\t");
