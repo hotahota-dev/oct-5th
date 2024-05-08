@@ -319,19 +319,11 @@ function submit_tsv() {
     tmp_array.push(csvArray[index][DATE]);
     tmp_array.push(csvArray[index][BU]);
     
-    if (csvArray[index][APPLY].indexOf('当落発表') == false) {
-      tmp_array.push('');
-    } else {
     var oubo = csvArray[index][APPLY].substr(csvArray[index][APPLY].indexOf(':') + 1, csvArray[index][APPLY].indexOf('当落発表') - 5);
     tmp_array.push(oubo);
-    }
     
-    if (csvArray[index][APPLY].indexOf('当落発表') == false) {
-      tmp_array.push('');
-    } else {
     var oubo = csvArray[index][APPLY].substr(csvArray[index][APPLY].lastIndexOf(':') + 1, csvArray[index][APPLY].lastIndexOf('当落発表') - 1);
     tmp_array.push(oubo);
-    }
     
     tmp_array.push(csvArray[index][PRICE]);
     tmp_array.push(csvArray[index][SET]);
